@@ -10,7 +10,7 @@ class DisplayBoard extends Component {
     }
 
     boardJSX = (
-        <div className="padding">
+        <div className="main">
         {this.props.board.boardColumns.map((column) => { return (
     <div class="page-content page-container" id="page-content">
         
