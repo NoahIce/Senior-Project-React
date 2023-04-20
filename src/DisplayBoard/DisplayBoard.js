@@ -7,11 +7,11 @@ import DisplayTask from "../DisplayTask/DisplayTask";
 class DisplayBoard extends Component {
 
     state = {
-        
     }
 
     boardJSX = (
-        this.props.board.boardColumns.map((column) =>
+        <div className="padding">
+        {this.props.board.boardColumns.map((column) => { return (
     <div class="page-content page-container" id="page-content">
         
         <div class="padding">
@@ -54,7 +54,8 @@ class DisplayBoard extends Component {
                 </div>
             </div>
             
-        </div>)
+        </div>) })}
+        </div>
     )
 
     render() {
