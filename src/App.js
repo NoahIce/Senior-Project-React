@@ -14,7 +14,7 @@ class App extends Component {
 
     signIn = (user) => {
         console.log("Signing in")
-        console.log(user);
+        console.log(user.boards);
         this.setState({ user: user});
         this.setState({ loggedIn: true });
         console.log(this.state.loggedIn)
