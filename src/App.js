@@ -4,12 +4,29 @@ import Home from './Home';
 import Navbar from './Navbar';
 import SignIn from './SignIn/SignIn'
 import ListBoards from './ListBoards/ListBoards';
+import axios from 'axios';
 
 class App extends Component {
 
     state = {
         loggedIn: false,
         user: {}
+    }
+
+     refresh = async () => {
+      console.log(this.state.user.user_id)
+                console.log("submit")
+                    try{
+                    await axios.get("http://localhost:3000/users/readUserById/?user_id=" + this.state.user.user_id).then(result => {
+                        console.log(result.status < 400);
+                        console.log(result.data)
+                        this.setState({ user: result.data[0]});
+                    })
+                }
+                catch (error)
+                {
+                    console.log(error)
+                }    
     }
 
     signIn = (user) => {
@@ -25,11 +42,11 @@ class App extends Component {
         this.setState({ loggedIn: false });
     }
 
-    listBoards = (this.state.loggedIn === false ? "" : <ListBoards user={this.state.user}></ListBoards>)
+    listBoards = (this.state.loggedIn === false ? "" : <ListBoards user={this.state.user} refresh={this.refresh}></ListBoards>)
     
 
   render() {
-    this.listBoards = (this.state.loggedIn === false ? "" : <ListBoards user={this.state.user}></ListBoards>)
+    this.listBoards = (this.state.loggedIn === false ? "" : <ListBoards user={this.state.user} refresh={this.refresh}></ListBoards>)
     return (
        <div>
         <Navbar loggedIn={this.state.loggedIn} signIn={this.signIn} signOut={this.signOut}></Navbar>

@@ -13,6 +13,7 @@ function SignIn (props) {
     const [password, setPassowrd] = useState("");
     const [error, setError] = useState("");
 
+
     async function submit() {
         console.log("submit")
         try{
@@ -39,8 +40,8 @@ function SignIn (props) {
 
   <main className="form-signin">
     <form>
-      <img className="mb-4" src="https://resizing.flixster.com/7teAttlGxEFkfptoq3r-GHgO4xY=/218x280/v2/https://flxt.tmsimg.com/assets/20782_v9_bb.jpg" alt=""  height="120" />
-      <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
+
+      <h1 style={{textAlign: "center"}} className="h3 mb-3 fw-normal">Please sign in</h1>
 
       <div className="form-floating">
         <input onChange={event => setEmail(event.target.value)} type="email" className="form-control" id="floatingInput" name="email" placeholder="name@example.com" />
@@ -51,7 +52,7 @@ function SignIn (props) {
         <label for="floatingPassword">Password</label>
       </div>
       <Link className="w-100 btn btn-lg btn-primary" type="button" onClick={submit}>Sign in</Link>
-      <p className="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
+      <p style={{textAlign: "center"}} className="mt-5 mb-3 text-muted">&copy; 2017–2023</p>
     </form>
     <p style={{color:'red'}}>{error}</p>
   </main>

@@ -9,30 +9,36 @@ class DisplayBoard extends Component {
     state = {
     }
 
+    // refresh() {
+    //     console.log("Create task")
+    //     console.log(this.props)
+    //     this.props.refresh();
+    // }
+
     boardJSX = (
         <div className="main">
         {this.props.board.boardColumns.map((column) => { return (
-    <div class="page-content page-container" id="page-content">
+    <div className="page-content page-container" id="page-content">
         
-        <div class="padding">
+        <div className="padding">
 
             <div>
-            <div class="row container">
-                <div class="col-sm-12">
-                    <div class="card" >
-                        <div class="card-header">
+            <div className="row container">
+                <div className="col-sm-12">
+                    <div className="card" >
+                        <div className="card-header">
                             <h5>{column.title }</h5>
                         </div>
-                        <div class="card-block">
-                            <div class="row" >
+                        <div className="card-block">
+                            <div className="row" >
                             {column.tasks.map((task) => {
                                 return (
                                     <div>
-                                <button type="button" class="task" data-bs-toggle="modal" data-bs-target={'#task'+task.task_id}>
-                                <div class="card task text-black bg-light mb-3">
-                                    <div class="card-body">
-                                    <h5 class="card-title">{task.title}</h5>
-                                    <p class="card-text">{task.description}</p>
+                                <button type="button" className="task" data-bs-toggle="modal" data-bs-target={'#task'+task.task_id}>
+                                <div className="card task text-black bg-light mb-3">
+                                    <div className="card-body">
+                                    <h5 className="card-title">{task.title}</h5>
+                                    <p className="card-text">{task.description}</p>
                                     </div>
                                 </div>
                                 </button>
@@ -45,11 +51,11 @@ class DisplayBoard extends Component {
                         </div>
 
                         </div>
-                        <div class="new-task">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target={'#newTask'+column.column_id}>New Task</button>
+                        <div className="new-task">
+                                <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target={'#newTask'+column.column_id}>New Task</button>
                         </div>
                         </div>
-                        <CreateTask board={this.props.board} column={column}></CreateTask>
+                        <CreateTask board={this.props.board} column={column} refresh={this.props.refresh}></CreateTask>
                     </div>
                 </div>
             </div>
@@ -59,13 +65,15 @@ class DisplayBoard extends Component {
     )
 
     render() {
+        console.log("props")
+        console.log(this.props.refresh)
         return (
             <div>
-                <div class="invite">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#invite">Invite a user</button>
+                <div className="invite">
+                <button className="btn btn-primary" data-toggle="modal" data-target="#invite">Invite a user</button>
                 {this.boardJSX}
             </div>
-                <button class="btn btn-light new-column" data-toggle="modal" data-target="#newColumn">New Column</button>
+                <button className="btn btn-light new-column" data-toggle="modal" data-target="#newColumn">New Column</button>
                 <CreateBoardColumn board="board"></CreateBoardColumn>
             </div>
             
