@@ -51,12 +51,13 @@ class CreateTask extends Component {
     update = () => {
         console.log(this.state)
         axios.post("http://localhost:3000/tasks/createTask", this.state).then((result) =>{
-    console.log("Wrote task" + this.state)
-    console.log(result)
-    console.log("here")
-        }
-            
-        )
+            console.log("Wrote task" + this.state)
+            console.log(result)
+            console.log("here")
+            this.props.refresh(async () => {
+                  
+            });
+        })
     }
 
     

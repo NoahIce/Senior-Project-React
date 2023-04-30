@@ -8,13 +8,18 @@ class ListBoards extends Component {
         selectedBoard: -1
     }
 
+    // refresh()
+    // {
+    //     this.props.refresh();
+    // }
+
     onSelectedBoard(board) {
         console.log("select board")
         this.setState({selectedBoard: board})
         console.log(board)
     }
 
-    displayBoard = (this.state.selectedBoard === {} ? "" : <DisplayBoard user={this.props.user} board={this.state.selectedBoard}></DisplayBoard>)
+    displayBoard = (this.state.selectedBoard === {} ? "" : <DisplayBoard user={this.props.user} board={this.state.selectedBoard} refresh={this.props.refresh}></DisplayBoard>)
     boardsList = (<div></div>)
     
     
@@ -52,8 +57,8 @@ class ListBoards extends Component {
     render() {
         console.log(this.state.selectedBoard)
         this.updateBoardsList();
-        this.displayBoard = (this.state.selectedBoard === -1 ? "" : <DisplayBoard user={this.props.user} board={this.state.selectedBoard}></DisplayBoard>)
-
+        this.displayBoard = (this.state.selectedBoard === -1 ? "" : <DisplayBoard user={this.props.user} board={this.state.selectedBoard} refresh = {this.props.refresh}></DisplayBoard>)
+        console.log(this.props.refresh)
             return (
                 <div>
                     <div className="boards">

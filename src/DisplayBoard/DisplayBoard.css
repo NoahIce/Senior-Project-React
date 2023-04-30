@@ -60,6 +60,12 @@ body {
     padding: 3rem !important
 }
 
+.main {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
 .card-sub {
     cursor: pointer;
     border: none;
