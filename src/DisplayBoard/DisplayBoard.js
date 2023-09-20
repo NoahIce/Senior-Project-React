@@ -3,6 +3,7 @@ import CreateBoardColumn from "../CreateBoardColumn/CreateBoardColumn";
 import CreateTask from "../CreateTask/CreateTask";
 import './DisplayBoard.css'
 import DisplayTask from "../DisplayTask/DisplayTask";
+import BoardColumnModal from "../BoardColumnModal/BoardColumnModal";
 
 class DisplayBoard extends Component {
 
@@ -15,6 +16,7 @@ class DisplayBoard extends Component {
     //     this.props.refresh();
     // }
 
+    //Board to render
     boardJSX = (
         <div className="main">
         {this.props.board.boardColumns.map((column) => { return (
@@ -27,8 +29,9 @@ class DisplayBoard extends Component {
                 <div className="col-sm-12">
                     <div className="card" >
                         <div className="card-header">
-                            <h5>{column.title }</h5>
+                            <button type="button" className="column" data-bs-toggle="modal" data-bs-target={'#column'+column.board_column_id}><h5>{column.title}</h5></button>
                         </div>
+                        <BoardColumnModal column={column} board={this.props.board}></BoardColumnModal>
                         <div className="card-block">
                             <div className="row" >
                             {column.tasks.map((task) => {
@@ -64,6 +67,7 @@ class DisplayBoard extends Component {
         </div>
     )
 
+    //Render
     render() {
         console.log("props")
         console.log(this.props.refresh)
@@ -73,8 +77,8 @@ class DisplayBoard extends Component {
                 <button className="btn btn-primary" data-toggle="modal" data-target="#invite">Invite a user</button>
                 {this.boardJSX}
             </div>
-                <button className="btn btn-light new-column" data-toggle="modal" data-target="#newColumn">New Column</button>
-                <CreateBoardColumn board="board"></CreateBoardColumn>
+                <button className="btn btn-light new-column" data-bs-toggle="modal" data-bs-target="#newColumn">New Column</button>
+                <CreateBoardColumn board={this.props.board}></CreateBoardColumn>
             </div>
             
 

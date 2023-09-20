@@ -3,6 +3,7 @@ import { Component } from "react";
 
 class DisplayTask extends Component {
 
+    //State
     state = {
         task_id: this.props.task.task_id,
         board_id: this.props.task.board_id,
@@ -15,42 +16,50 @@ class DisplayTask extends Component {
         priority: this.props.task.priority
     }
 
+    //Handle title change
     titleChange = (event) => {
         console.log(event.target.value)
         this.setState({title: event.target.value})
         console.log(this.state.title)
     }
 
+    //Handle column change
     columnChange = (event) => {
         console.log(event.target.value)
         this.setState({board_column_id: event.target.value})
     }
-
+ 
+    //Handle description change
     descriptionChange = (event) => {
         console.log(event.target.value)
         this.setState({description: event.target.value})
     }
     
+    //Handle assignee change
     assigneeChange = (event) => {
         console.log(event.target.value)
         this.setState({assignee: event.target.value})
     }
 
+    //Handle reviewer change
     reviewerChange = (event) => {
         console.log(event.target.value)
         this.setState({reviewer: event.target.value})
     }
 
+    //Handle story points change
     storyPointsChange = (event) => {
         console.log(event.target.value)
         this.setState({story_points: event.target.value})
     }
 
+    //Handle priority change
     priorityChange = (event) => {
         console.log(event.target.value)
         this.setState({priority: event.target.value})
     }
 
+    //update request
     update = () => {
         console.log(this.state)
         axios.put("http://localhost:3000/tasks/updateTask", this.state).then((result) =>{
@@ -62,6 +71,7 @@ class DisplayTask extends Component {
         )
     }
 
+    //delete request
     delete = () => {
         axios.delete("http://localhost:3000/tasks/deleteTask/" + this.state.task_id).then((result) =>{
     console.log("Delete task" + this.state)
@@ -70,6 +80,7 @@ class DisplayTask extends Component {
         })
     }
 
+    //Get all columns
     columnOptions = (
         this.props.board.boardColumns.map((column) => {
             return <option value={column.board_column_id}>{column.title}</option>
@@ -77,6 +88,7 @@ class DisplayTask extends Component {
         
     )
 
+    //Modal to render
     taskJSX = (
         <div className="modal fade" name={"task" + this.props.task.task_id} id={"task" + this.props.task.task_id} tabindex="-1" role="dialog" aria-labelledby="task" aria-hidden="true">
         <div className="modal-dialog" role="document">

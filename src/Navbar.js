@@ -36,7 +36,7 @@ class Navbar extends Component {
                         {this.loggedInNav}
                     </li>
                     <li className="nav-item">
-                    <Link className="nav-link" Link to={'/'} >Register</Link>
+                    <Link className="nav-link" Link to={'/register'} >Register</Link>
                     </li>
                 </ul>
                 </div>
