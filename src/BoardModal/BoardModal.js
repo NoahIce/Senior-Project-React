@@ -1,13 +1,12 @@
 import { Component } from "react";
 import axios from "axios";
 
-class CreateBoardColumn extends Component {
+class BoardModal extends Component {
 
     //State
     state = {
         board_id: this.props.board.board_id,
-        position: 0,
-        title: '',
+        title: this.props.board.title,
     }
 
     //Handle title change
@@ -20,27 +19,36 @@ class CreateBoardColumn extends Component {
     //Update request
     update = () => {
         console.log(this.state)
-        axios.post("http://localhost:3000/boardColumns/createBoardColumn", this.state).then((result) =>{
-        console.log("Wrote task" + this.state)
-        console.log(result)
-        console.log("here")
+        axios.put("http://localhost:3000/boards/updateBoard", this.state).then((result) =>{
+    console.log("Wrote board" + this.state)
+    console.log(result)
+    console.log("here")
         }
             
         )
+    }
+
+    //Delete request
+    delete = () => {
+        axios.delete("http://localhost:3000/boards/deleteBoard/" + this.state.board_id).then((result) =>{
+    console.log("Delete board" + this.state)
+    console.log(result)
+    console.log("here")
+        })
     }
 
     //Render
     render() {
         return (
             <div>
-        {this.columnModalJSX}
+        {this.BoardJSX}
         </div>
         )
-    }
+        }
 
-    //Modal to render
-    columnModalJSX = (
-        <div className="modal fade" name={"newColumn"} id={"newColumn"} tabindex="-1" role="dialog" aria-labelledby="task" aria-hidden="true">
+        //Modal to render
+BoardJSX = (
+<div className="modal fade" name={"board" + this.props.board.board_id} id={"board" + this.props.board.board_id} tabindex="-1" role="dialog" aria-labelledby="task" aria-hidden="true">
         <div className="modal-dialog" role="document">
             <form>
             <div className="modal-content">
@@ -50,16 +58,15 @@ class CreateBoardColumn extends Component {
                     <span aria-hidden="true">&times;</span>
                 </button>
                 </div>
-                <div>
-                </div>
                 <div className="modal-footer">
+                <button data-bs-dismiss="modal" type="button" className="btn btn-danger" onClick={this.delete}>Delete</button>
                 <button data-bs-dismiss="modal" type="button" className="btn btn-primary" onClick={this.update}>Save changes</button>
                 </div>
             </div>
             </form>
             </div>
         </div>
-    )
+        )
 }
 
-export default CreateBoardColumn
+export default BoardModal

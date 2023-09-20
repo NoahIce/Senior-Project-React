@@ -8,11 +8,13 @@ import axios from 'axios';
 
 class App extends Component {
 
+    //State
     state = {
         loggedIn: false,
         user: {}
     }
 
+    //Method for refeshing when state changes
      refresh = async () => {
       console.log(this.state.user.user_id)
                 console.log("submit")
@@ -29,6 +31,7 @@ class App extends Component {
                 }    
     }
 
+    //Method to sign in user
     signIn = (user) => {
         console.log("Signing in")
         console.log(user.boards);
@@ -37,6 +40,7 @@ class App extends Component {
         console.log(this.state.loggedIn)
     }
 
+    //Method to sign out user
     signOut = () => {
         console.log("Signing out")
         this.setState({ loggedIn: false });
@@ -45,6 +49,7 @@ class App extends Component {
     listBoards = (this.state.loggedIn === false ? "" : <ListBoards user={this.state.user} refresh={this.refresh}></ListBoards>)
     
 
+    //Render
   render() {
     this.listBoards = (this.state.loggedIn === false ? "" : <ListBoards user={this.state.user} refresh={this.refresh}></ListBoards>)
     return (

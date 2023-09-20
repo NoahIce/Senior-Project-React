@@ -2,6 +2,7 @@ import { Component } from "react";
 import axios from "axios";
 
 class CreateTask extends Component {
+    //State
     state = {
         board_id: this.props.board.board_id,
         title: "",
@@ -13,41 +14,42 @@ class CreateTask extends Component {
         priority: -1
     }
 
+    //Handle title change
     titleChange = (event) => {
         console.log(event.target.value)
         this.setState({title: event.target.value})
     }
-
+//Handle column change
     columnChange = (event) => {
         console.log(event.target.value)
         this.setState({board_column_id: event.target.value})
     }
-
+//Handle description  change
     descriptionChange = (event) => {
         console.log(event.target.value)
         this.setState({description: event.target.value})
     }
-    
+    //Handle assignee change
     assigneeChange = (event) => {
         console.log(event.target.value)
         this.setState({assignee: event.target.value})
     }
-
+//Handle reviewer change
     reviewerChange = (event) => {
         console.log(event.target.value)
         this.setState({reviewer: event.target.value})
     }
-
+//Handle story points change
     storyPointsChange = (event) => {
         console.log(event.target.value)
         this.setState({story_points: event.target.value})
     }
-
+//Handle priority change
     priorityChange = (event) => {
         console.log(event.target.value)
         this.setState({priority: event.target.value})
     }
-
+//Update request
     update = () => {
         console.log(this.state)
         axios.post("http://localhost:3000/tasks/createTask", this.state).then((result) =>{
@@ -61,14 +63,14 @@ class CreateTask extends Component {
     }
 
     
-
+//Get all columns
     columnOptions = (
         this.props.board.boardColumns.map((column) => {
             return <option value={column.board_column_id}>{column.title}</option>
         })
         
     )
-
+//modal to render
     taskJSX = (
         <div className="modal fade" name={"newTask"+this.props.column.column_id} id={"newTask"+this.props.column.column_id}  tabindex="-1" role="dialog" aria-labelledby="task" aria-hidden="true">
         <div className="modal-dialog" role="document">

@@ -1,13 +1,12 @@
 import { Component } from "react";
 import axios from "axios";
 
-class CreateBoardColumn extends Component {
+class CreateBoard extends Component {
 
     //State
     state = {
-        board_id: this.props.board.board_id,
-        position: 0,
         title: '',
+        user: this.props.user
     }
 
     //Handle title change
@@ -20,12 +19,11 @@ class CreateBoardColumn extends Component {
     //Update request
     update = () => {
         console.log(this.state)
-        axios.post("http://localhost:3000/boardColumns/createBoardColumn", this.state).then((result) =>{
-        console.log("Wrote task" + this.state)
-        console.log(result)
-        console.log("here")
+        axios.post("http://localhost:3000/boards/createBoard", this.state).then((result) =>{
+    console.log("Wrote board" + this.state)
+    console.log(result)
+    console.log("here")
         }
-            
         )
     }
 
@@ -33,14 +31,15 @@ class CreateBoardColumn extends Component {
     render() {
         return (
             <div>
-        {this.columnModalJSX}
+        {this.BoardJSX}
         </div>
         )
     }
 
+
     //Modal to render
-    columnModalJSX = (
-        <div className="modal fade" name={"newColumn"} id={"newColumn"} tabindex="-1" role="dialog" aria-labelledby="task" aria-hidden="true">
+BoardJSX = (
+<div className="modal fade" name={"newBoard"} id={"newBoard"} tabindex="-1" role="dialog" aria-labelledby="task" aria-hidden="true">
         <div className="modal-dialog" role="document">
             <form>
             <div className="modal-content">
@@ -50,8 +49,6 @@ class CreateBoardColumn extends Component {
                     <span aria-hidden="true">&times;</span>
                 </button>
                 </div>
-                <div>
-                </div>
                 <div className="modal-footer">
                 <button data-bs-dismiss="modal" type="button" className="btn btn-primary" onClick={this.update}>Save changes</button>
                 </div>
@@ -59,7 +56,7 @@ class CreateBoardColumn extends Component {
             </form>
             </div>
         </div>
-    )
+        )
 }
 
-export default CreateBoardColumn
+export default CreateBoard

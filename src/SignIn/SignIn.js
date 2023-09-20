@@ -8,12 +8,14 @@ import './SignIn.css'
 
 
 function SignIn (props) {
+
+  //State
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassowrd] = useState("");
     const [error, setError] = useState("");
 
-
+//Function from authenticating the user
     async function submit() {
         console.log("submit")
         try{
@@ -34,7 +36,7 @@ function SignIn (props) {
     }
     
 
-    
+    //Main html to return
         return (
             <div className="signIn" >
 
