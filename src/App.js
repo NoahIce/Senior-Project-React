@@ -11,7 +11,8 @@ class App extends Component {
     //State
     state = {
         loggedIn: false,
-        user: {}
+        user: {},
+        tokenClient: null
     }
 
     //Method for refeshing when state changes
