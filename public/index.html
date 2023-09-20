@@ -27,6 +27,9 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <script async defer src="https://apis.google.com/js/platform.js" onload=gapiLoaded()></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload=gisLoaded()></script>
+    <meta name="google-signin-client_id" content="384934269492-a2ha8tukrmbcmp04rbfjb460ksrugk5o.apps.googleusercontent.com">
     <title>React App</title>
   </head>
   <body>
