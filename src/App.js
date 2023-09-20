@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import SignIn from './SignIn/SignIn'
 import ListBoards from './ListBoards/ListBoards';
 import axios from 'axios';
+import { CLIENT_ID, API_KEY, DISCOVERY_DOC, SCOPES } from './config';
 
 class App extends Component {
 
@@ -12,7 +13,8 @@ class App extends Component {
     state = {
         loggedIn: false,
         user: {},
-        tokenClient: null
+        tokenClient: null,
+        access_token: null
     }
 
     //Method for refeshing when state changes
@@ -50,12 +52,25 @@ class App extends Component {
     listBoards = (this.state.loggedIn === false ? "" : <ListBoards user={this.state.user} refresh={this.refresh}></ListBoards>)
     
 
+    componentDidMount() {
+    console.log("App Mounted")
+    console.log(CLIENT_ID)
+    console.log(this.props.tokenClient)
+  }
+
+  googleSignIn = (access_token) => {
+    console.log("Google sign in: " + access_token)
+    this.setState({"access_token": access_token})
+    //uncomment to display <ListBoards></ListBoards>
+    //this.setState({ loggedIn: true })
+  }
+
     //Render
   render() {
-    this.listBoards = (this.state.loggedIn === false ? "" : <ListBoards user={this.state.user} refresh={this.refresh}></ListBoards>)
+    this.listBoards = (this.state.loggedIn === false ? "" : <ListBoards user={this.state.user} refresh={this.refresh} tokenClient={this.props.tokenClient}></ListBoards>)
     return (
        <div>
-        <Navbar loggedIn={this.state.loggedIn} signIn={this.signIn} signOut={this.signOut}></Navbar>
+        <Navbar loggedIn={this.state.loggedIn} signIn={this.signIn} signOut={this.signOut} tokenClient={this.props.tokenClient} googleSignIn={this.googleSignIn}></Navbar>
         {this.listBoards}
        </div> 
     );

@@ -45,7 +45,7 @@ class Navbar extends Component {
 
           <Routes>
               <Route exact path='/' element={<Home app={this} />} />
-              <Route exact path='/SignIn' element={<SignIn app={this} onSubmit={this.signIn} />} />
+              <Route exact path='/SignIn' element={<SignIn app={this} onSubmit={this.signIn} tokenClient={this.props.tokenClient} googleSignIn={this.props.googleSignIn} />} />
           </Routes>
           </Router>
         </div>
