@@ -14,7 +14,6 @@ function SignIn (props) {
     const [email, setEmail] = useState("");
     const [password, setPassowrd] = useState("");
     const [error, setError] = useState("");
-    const [access_token, set_access_token] = useState("");
 
 //Function from authenticating the user
     async function submit() {
@@ -45,10 +44,8 @@ function SignIn (props) {
           }
           getUserId().then((user_id) => {
             fetchGoogleTasks(user_id).then(() => {
-              props.googleSignIn(access_token)
-            }).then(() => {
-                navigate('/', {replace: true})
-            });
+            })
+              navigate('/', {replace: true})
           })
         };
 
@@ -108,7 +105,7 @@ function SignIn (props) {
     async function getUserId() {
       // eslint-disable-next-line no-undef
       var access_token = gapi.client.getToken().access_token
-      set_access_token(access_token);
+      props.googleSignIn(access_token)
       // eslint-disable-next-line no-undef
       //console.log(access_token)
       return await axios.get("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + access_token).then(result => {

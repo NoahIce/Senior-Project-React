@@ -61,8 +61,7 @@ class App extends Component {
   googleSignIn = (access_token) => {
     console.log("Google sign in: " + access_token)
     this.setState({"access_token": access_token})
-    //uncomment to display <ListBoards></ListBoards>
-    //this.setState({ loggedIn: true })
+    //this.setState({ loggedIn: true }) //uncomment to display <ListBoards></ListBoards>
   }
 
     //Render

@@ -24,7 +24,7 @@ class ListBoards extends Component {
         console.log(board)
     }
 
-    displayBoard = (this.state.selectedBoard === {} ? "" : <DisplayBoard user={this.props.user} board={this.state.selectedBoard} refresh={this.props.refresh}></DisplayBoard>)
+    displayBoard = (this.state.selectedBoard === -1 ? "" : <DisplayBoard user={this.props.user} board={this.state.selectedBoard} refresh={this.props.refresh}></DisplayBoard>)
     boardsList = (<div></div>)
     
     //Update the boards when changed
