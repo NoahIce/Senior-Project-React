@@ -1,14 +1,25 @@
-import { Component } from "react";
+import { Component, useState } from "react";
 import CreateBoardColumn from "../CreateBoardColumn/CreateBoardColumn";
 import CreateTask from "../CreateTask/CreateTask";
 import './DisplayBoard.css'
 import DisplayTask from "../DisplayTask/DisplayTask";
 import BoardColumnModal from "../BoardColumnModal/BoardColumnModal";
+import axios from "axios";
+import { useEffect } from "react";
 
-class DisplayBoard extends Component {
+function DisplayBoard(props)  {
 
-    state = {
-    }
+    const [tasks, setTasks] = useState([])
+    useEffect(() => {
+        console.log("I have been mounted")
+        getUserId().then((user_id) => {
+            fetchTasks(props.board, user_id)
+        })
+        
+    }, [])
+    
+
+    let tasksJSX = (<div></div>)
 
     // refresh() {
     //     console.log("Create task")
@@ -17,6 +28,7 @@ class DisplayBoard extends Component {
     // }
 
     //Board to render
+    /*
     boardJSX = (
         <div className="main">
         {this.props.board.boardColumns.map((column) => { return (
@@ -66,12 +78,88 @@ class DisplayBoard extends Component {
         </div>) })}
         </div>
     )
+    */
 
-    //Render
-    render() {
-        console.log("props")
-        console.log(this.props.refresh)
+    let taskJSX = {}
+
+    async function getUserId() {
+      // eslint-disable-next-line no-undef
+      var access_token = gapi.client.getToken().access_token
+      //props.googleSignIn(access_token)
+      // eslint-disable-next-line no-undef
+      //console.log(access_token)
+      return await axios.get("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + access_token).then(result => {
+        console.log(result.data.id)
+        return result.data.id
+      })
+      //console.log(gapi.client.getToken().access_token)
+    }
+
+    async function fetchTasks(board, user_id) {
+    // eslint-disable-next-line no-undef
+    await gapi.client.tasks.tasks.list({tasklist: board.id}).then(function(response){
+        console.log(response.result.items)
+        response.result.items.forEach(task => {
+            axios.get("http://localhost:3000/tasks/getMatchingGoogleTasks?google_id=" + task.id).then((result) =>{
+            if (result.data.length === 0){
+            //console.log(user_id)
+            axios.post("http://localhost:3000/tasks/createTask", {
+                "board_id": board.id,
+                "board_column_id": 1,
+                "title": task.title,
+                "description": task.hasOwnProperty("notes") ? task.notes : "",
+                "assignee": 1,
+                "reviewer": 1,
+                "story_points": 10,
+                "priority": 1,
+                "google_id": task.id,
+                "user_id": user_id
+            }).then((result) =>{console.log("wrote task")})
+            }
+            })
+        })
+        })
+        let tempTasks = []
+        // eslint-disable-next-line no-undef
+        await gapi.client.tasks.tasks.list({tasklist: board.id}).then(function(response){
+        response.result.items.forEach(googleTask => {
+            axios.get("http://localhost:3000/tasks/getMatchingGoogleTasks?google_id=" + googleTask.id).then((task) => {
+                tempTasks.push(task.data[0])
+                console.log(task.data[0])
+                
+                setTasks(tempTasks.slice())
+                taskJSX = tasks.map((task) => {
+                    return (
+                        <li className="list-group-item">{task.title}</li>
+                    )})
+            })
+        })
+        })
+        //console.log(tasks)
+    }
+
+    function test() {
+        console.log(taskJSX)
+    }
+    
+
+
         return (
+            
+            <div>
+                <button onClick={test}>Test</button>
+
+                <div className="card">
+                <ul className="list-group list-group-flush">
+                    {tasks.map((task) => {
+                    return (
+                        <li className="list-group-item">{task.title}</li>
+                    )})}
+                </ul>
+                </div>
+                
+            </div>
+            /*
             <div>
                 <div className="invite">
                 <button className="btn btn-primary" data-toggle="modal" data-target="#invite">Invite a user</button>
@@ -80,11 +168,9 @@ class DisplayBoard extends Component {
                 <button className="btn btn-light new-column" data-bs-toggle="modal" data-bs-target="#newColumn">New Column</button>
                 <CreateBoardColumn board={this.props.board}></CreateBoardColumn>
             </div>
+            */
             
-
-
         )
-    }
 }
 
 export default DisplayBoard
