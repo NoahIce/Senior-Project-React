@@ -10,13 +10,20 @@ import { useEffect } from "react";
 function DisplayBoard(props)  {
 
     const [tasks, setTasks] = useState([])
+    const [columns, setColumns] = useState([])
     useEffect(() => {
         console.log("I have been mounted")
         getUserId().then((user_id) => {
             fetchTasks(props.board, user_id)
+        }).then(() => {
+            console.log(props.board.id)
+            
         })
+        fetchColumns(props.board.id);
         
     }, [])
+
+
     
 
     let tasksJSX = (<div></div>)
@@ -28,10 +35,9 @@ function DisplayBoard(props)  {
     // }
 
     //Board to render
-    /*
-    boardJSX = (
+    let boardJSX = (
         <div className="main">
-        {this.props.board.boardColumns.map((column) => { return (
+        {columns.map((column) => { return (
     <div className="page-content page-container" id="page-content">
         
         <div className="padding">
@@ -43,7 +49,7 @@ function DisplayBoard(props)  {
                         <div className="card-header">
                             <button type="button" className="column" data-bs-toggle="modal" data-bs-target={'#column'+column.board_column_id}><h5>{column.title}</h5></button>
                         </div>
-                        <BoardColumnModal column={column} board={this.props.board}></BoardColumnModal>
+                        
                         <div className="card-block">
                             <div className="row" >
                             {column.tasks.map((task) => {
@@ -57,7 +63,7 @@ function DisplayBoard(props)  {
                                     </div>
                                 </div>
                                 </button>
-                                <DisplayTask task={task} board={this.props.board}></DisplayTask>
+                                
                                 </div>
                                 )
                             })}
@@ -70,7 +76,7 @@ function DisplayBoard(props)  {
                                 <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target={'#newTask'+column.column_id}>New Task</button>
                         </div>
                         </div>
-                        <CreateTask board={this.props.board} column={column} refresh={this.props.refresh}></CreateTask>
+                        
                     </div>
                 </div>
             </div>
@@ -78,7 +84,6 @@ function DisplayBoard(props)  {
         </div>) })}
         </div>
     )
-    */
 
     let taskJSX = {}
 
@@ -90,7 +95,7 @@ function DisplayBoard(props)  {
       //console.log(access_token)
       return await axios.get("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + access_token).then(result => {
         console.log(result.data.id)
-        return result.data.id
+        return result.data.id;
       })
       //console.log(gapi.client.getToken().access_token)
     }
@@ -105,7 +110,7 @@ function DisplayBoard(props)  {
             //console.log(user_id)
             axios.post("http://localhost:3000/tasks/createTask", {
                 "board_id": board.id,
-                "board_column_id": 1,
+                "board_column_id": 0,
                 "title": task.title,
                 "description": task.hasOwnProperty("notes") ? task.notes : "",
                 "assignee": 1,
@@ -124,8 +129,8 @@ function DisplayBoard(props)  {
         await gapi.client.tasks.tasks.list({tasklist: board.id}).then(function(response){
         response.result.items.forEach(googleTask => {
             axios.get("http://localhost:3000/tasks/getMatchingGoogleTasks?google_id=" + googleTask.id).then((task) => {
-                tempTasks.push(task.data[0])
-                console.log(task.data[0])
+                tempTasks.push(task.data[0]);
+                console.log(task.data[0]);
                 
                 setTasks(tempTasks.slice())
                 taskJSX = tasks.map((task) => {
@@ -138,18 +143,59 @@ function DisplayBoard(props)  {
         //console.log(tasks)
     }
 
+    async function fetchColumns(board_id) {
+        axios.get("http://localhost:3000/boardColumns/getBoardColumnsByBoardId?board_id=" + board_id).then((response) => {
+            if (response.data.length === 0) {
+                axios.post("http://localhost:3000/boardColumns/createBoardColumn", {
+                    "board_id": props.board.id,
+                    "title": "To Do",
+                    "position": 1
+                }).then(() => {
+                    axios.post("http://localhost:3000/boardColumns/createBoardColumn", {
+                        "board_id": props.board.id,
+                        "title": "In Progress",
+                        "position": 2
+                    })
+                }).then(() => {
+                    axios.post("http://localhost:3000/boardColumns/createBoardColumn", {
+                        "board_id": props.board.id,
+                        "title": "Done",
+                        "position": 3
+                    })
+                }).then(() => {
+                    fetchColumns(props.board.id);
+                })
+            }
+            else {
+                console.log(response.data)
+                console.log(tasks)
+                for (let column of response.data) {
+                    column.tasks = [];
+                    tasks.forEach(task => {
+                        console.log(column.position)
+                        if (task.board_column_id <= 1 && column.position === 1) {
+                            column.tasks.push(task)
+                        }
+                        else if (task.board_column_id === column.board_column_id) {
+                            column.tasks.push(task)
+                        }
+                    })
+                    setColumns(response.data);
+                }
+            }
+        })
+    }
+
     function test() {
-        console.log(taskJSX)
+        console.log(columns)
     }
     
 
 
         return (
-            
-            <div>
-                <button onClick={test}>Test</button>
 
-                <div className="card">
+            /*
+            <div className="card">
                 <ul className="list-group list-group-flush">
                     {tasks.map((task) => {
                     return (
@@ -157,6 +203,13 @@ function DisplayBoard(props)  {
                     )})}
                 </ul>
                 </div>
+            */
+            
+            <div>
+                <button onClick={test}>Test</button>
+
+                
+                {boardJSX}
                 
             </div>
             /*
