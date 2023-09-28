@@ -12,7 +12,7 @@ class App extends Component {
     //State
     state = {
         loggedIn: false,
-        user: {},
+        //user: null,
         tokenClient: null,
         access_token: null
     }
@@ -36,11 +36,9 @@ class App extends Component {
 
     //Method to sign in user
     signIn = (user) => {
-        console.log("Signing in")
-        console.log(user.boards);
-        this.setState({ user: user});
-        this.setState({ loggedIn: true });
-        console.log(this.state.loggedIn)
+        console.log(user)
+        this.setState({ user: user });
+        console.log(this.state.user)
     }
 
     //Method to sign out user

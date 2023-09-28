@@ -1,32 +1,14 @@
-import { Component, useState } from "react";
+import { Component } from "react";
 import CreateBoardColumn from "../CreateBoardColumn/CreateBoardColumn";
 import CreateTask from "../CreateTask/CreateTask";
 import './DisplayBoard.css'
 import DisplayTask from "../DisplayTask/DisplayTask";
 import BoardColumnModal from "../BoardColumnModal/BoardColumnModal";
-import axios from "axios";
-import { useEffect } from "react";
 
-function DisplayBoard(props)  {
+class DisplayBoard extends Component {
 
-    const [tasks, setTasks] = useState([])
-    const [columns, setColumns] = useState([])
-    useEffect(() => {
-        console.log("I have been mounted")
-        getUserId().then((user_id) => {
-            fetchTasks(props.board, user_id)
-        }).then(() => {
-            console.log(props.board.id)
-            
-        })
-        fetchColumns(props.board.id);
-        
-    }, [])
-
-
-    
-
-    let tasksJSX = (<div></div>)
+    state = {
+    }
 
     // refresh() {
     //     console.log("Create task")
@@ -35,9 +17,9 @@ function DisplayBoard(props)  {
     // }
 
     //Board to render
-    let boardJSX = (
+    boardJSX = (
         <div className="main">
-        {columns.map((column) => { return (
+        {this.props.board.boardColumns.map((column) => { return (
     <div className="page-content page-container" id="page-content">
         
         <div className="padding">
@@ -49,7 +31,7 @@ function DisplayBoard(props)  {
                         <div className="card-header">
                             <button type="button" className="column" data-bs-toggle="modal" data-bs-target={'#column'+column.board_column_id}><h5>{column.title}</h5></button>
                         </div>
-                        
+                        <BoardColumnModal column={column} board={this.props.board}></BoardColumnModal>
                         <div className="card-block">
                             <div className="row" >
                             {column.tasks.map((task) => {
@@ -63,7 +45,7 @@ function DisplayBoard(props)  {
                                     </div>
                                 </div>
                                 </button>
-                                
+                                <DisplayTask task={task} board={this.props.board}></DisplayTask>
                                 </div>
                                 )
                             })}
@@ -76,7 +58,7 @@ function DisplayBoard(props)  {
                                 <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target={'#newTask'+column.column_id}>New Task</button>
                         </div>
                         </div>
-                        
+                        <CreateTask board={this.props.board} column={column} refresh={this.props.refresh}></CreateTask>
                     </div>
                 </div>
             </div>
@@ -85,134 +67,11 @@ function DisplayBoard(props)  {
         </div>
     )
 
-    let taskJSX = {}
-
-    async function getUserId() {
-      // eslint-disable-next-line no-undef
-      var access_token = gapi.client.getToken().access_token
-      //props.googleSignIn(access_token)
-      // eslint-disable-next-line no-undef
-      //console.log(access_token)
-      return await axios.get("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + access_token).then(result => {
-        console.log(result.data.id)
-        return result.data.id;
-      })
-      //console.log(gapi.client.getToken().access_token)
-    }
-
-    async function fetchTasks(board, user_id) {
-    // eslint-disable-next-line no-undef
-    await gapi.client.tasks.tasks.list({tasklist: board.id}).then(function(response){
-        console.log(response.result.items)
-        response.result.items.forEach(task => {
-            axios.get("http://localhost:3000/tasks/getMatchingGoogleTasks?google_id=" + task.id).then((result) =>{
-            if (result.data.length === 0){
-            //console.log(user_id)
-            axios.post("http://localhost:3000/tasks/createTask", {
-                "board_id": board.id,
-                "board_column_id": 0,
-                "title": task.title,
-                "description": task.hasOwnProperty("notes") ? task.notes : "",
-                "assignee": 1,
-                "reviewer": 1,
-                "story_points": 10,
-                "priority": 1,
-                "google_id": task.id,
-                "user_id": user_id
-            }).then((result) =>{console.log("wrote task")})
-            }
-            })
-        })
-        })
-        let tempTasks = []
-        // eslint-disable-next-line no-undef
-        await gapi.client.tasks.tasks.list({tasklist: board.id}).then(function(response){
-        response.result.items.forEach(googleTask => {
-            axios.get("http://localhost:3000/tasks/getMatchingGoogleTasks?google_id=" + googleTask.id).then((task) => {
-                tempTasks.push(task.data[0]);
-                console.log(task.data[0]);
-                
-                setTasks(tempTasks.slice())
-                taskJSX = tasks.map((task) => {
-                    return (
-                        <li className="list-group-item">{task.title}</li>
-                    )})
-            })
-        })
-        })
-        //console.log(tasks)
-    }
-
-    async function fetchColumns(board_id) {
-        axios.get("http://localhost:3000/boardColumns/getBoardColumnsByBoardId?board_id=" + board_id).then((response) => {
-            if (response.data.length === 0) {
-                axios.post("http://localhost:3000/boardColumns/createBoardColumn", {
-                    "board_id": props.board.id,
-                    "title": "To Do",
-                    "position": 1
-                }).then(() => {
-                    axios.post("http://localhost:3000/boardColumns/createBoardColumn", {
-                        "board_id": props.board.id,
-                        "title": "In Progress",
-                        "position": 2
-                    })
-                }).then(() => {
-                    axios.post("http://localhost:3000/boardColumns/createBoardColumn", {
-                        "board_id": props.board.id,
-                        "title": "Done",
-                        "position": 3
-                    })
-                }).then(() => {
-                    fetchColumns(props.board.id);
-                })
-            }
-            else {
-                console.log(response.data)
-                console.log(tasks)
-                for (let column of response.data) {
-                    column.tasks = [];
-                    tasks.forEach(task => {
-                        console.log(column.position)
-                        if (task.board_column_id <= 1 && column.position === 1) {
-                            column.tasks.push(task)
-                        }
-                        else if (task.board_column_id === column.board_column_id) {
-                            column.tasks.push(task)
-                        }
-                    })
-                    setColumns(response.data);
-                }
-            }
-        })
-    }
-
-    function test() {
-        console.log(columns)
-    }
-    
-
-
+    //Render
+    render() {
+        console.log("props")
+        console.log(this.props.refresh)
         return (
-
-            /*
-            <div className="card">
-                <ul className="list-group list-group-flush">
-                    {tasks.map((task) => {
-                    return (
-                        <li className="list-group-item">{task.title}</li>
-                    )})}
-                </ul>
-                </div>
-            */
-            
-            <div>
-                <button onClick={test}>Test</button>
-
-                
-                {boardJSX}
-                
-            </div>
-            /*
             <div>
                 <div className="invite">
                 <button className="btn btn-primary" data-toggle="modal" data-target="#invite">Invite a user</button>
@@ -221,9 +80,11 @@ function DisplayBoard(props)  {
                 <button className="btn btn-light new-column" data-bs-toggle="modal" data-bs-target="#newColumn">New Column</button>
                 <CreateBoardColumn board={this.props.board}></CreateBoardColumn>
             </div>
-            */
             
+
+
         )
+    }
 }
 
 export default DisplayBoard

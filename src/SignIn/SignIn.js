@@ -42,10 +42,13 @@ function SignIn (props) {
           if (resp.error !== undefined) {
             throw (resp);
           }
-          getUserId().then((user_id) => {
+          getUserId().then((email) => {
+            /*
             fetchGoogleTasks(user_id).then(() => {
             })
-              navigate('/', {replace: true})
+            */
+            fetchUser(email);
+            navigate('/', {replace: true})
           })
         };
 
@@ -60,6 +63,13 @@ function SignIn (props) {
         }
 
         
+    }
+
+    async function fetchUser(email) {
+      await axios.get("http://localhost:3000/users/readUserByEmail/?email=" + email).then((user) => {
+        console.log(user.data[0])
+        props.onSubmit(user.data[0])
+      })
     }
 
     async function fetchGoogleTasks(user_id) {
@@ -109,8 +119,8 @@ function SignIn (props) {
       // eslint-disable-next-line no-undef
       //console.log(access_token)
       return await axios.get("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + access_token).then(result => {
-        console.log(result.data.id)
-        return result.data.id
+        console.log(result.data.email)
+        return result.data.email
       })
       //console.log(gapi.client.getToken().access_token)
     }

@@ -3,7 +3,6 @@ import './ListBoards.css'
 import DisplayBoard from "../DisplayBoard/DisplayBoard";
 import BoardModal from "../BoardModal/BoardModal";
 import CreateBoard from "../CreateBoard/CreateBoard";
-import axios from "axios";
 
 class ListBoards extends Component {
 
@@ -11,7 +10,6 @@ class ListBoards extends Component {
     state = {
         selectedBoard: -1,
         user: this.props.user,
-        taskLists: null,
     }
 
     // refresh()
@@ -30,7 +28,6 @@ class ListBoards extends Component {
     boardsList = (<div></div>)
     
     //Update the boards when changed
-    /*
     updateBoardsList = () => {
         if (this.state.selectedBoard === -1)
         {
@@ -59,48 +56,21 @@ class ListBoards extends Component {
         }
         
     }
-    */
 
     createBoard = <button className="btn btn-light new-column" data-toggle="modal" data-target="#newBoard">New Board</button>
     
-    async componentDidMount() {
-        // eslint-disable-next-line no-undef
-        let response = await gapi.client.tasks.tasklists.list();
-        let taskLists = response.result.items
-          console.log(taskLists)
-          this.setState({taskLists: response.result.items})
-          this.boardsList = taskLists.map((list) => {
-            
-            return (<div>
-                <div>
-                <div className="card" style={{width: "18rem"}}>
-                    <div className="card-body">
-                    <h5 className="card-title">{list.title}</h5>
-                        <button className="btn btn-primary" value={list.id}
-                        onClick={() => this.onSelectedBoard(list)}
-                        >
-                        Go To
-                        </button>
-                    </div>
-                    <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target={'#board'+list.id}>Edit</button>
-                    <BoardModal board={list}></BoardModal>
-                </div>
-                </div>
-            </div>)
-          })
-    }
 
 
     //render
     render() {
         console.log(this.state.selectedBoard)
-        //this.updateBoardsList();
-        this.displayBoard = (this.state.selectedBoard === -1 ? "" : <DisplayBoard user={this.props.user} board={this.state.selectedBoard} refresh = {this.props.refresh} ></DisplayBoard>)
+        this.updateBoardsList();
+        this.displayBoard = (this.state.selectedBoard === -1 ? "" : <DisplayBoard user={this.props.user} board={this.state.selectedBoard} refresh = {this.props.refresh}></DisplayBoard>)
         console.log(this.props.refresh)
             return (
                 <div>
                     <div className="boards">
-                        { this.state.selectedBoard !== -1 ? "" : this.boardsList}
+                        {this.boardsList}
                     </div>
                     
                     {this.displayBoard}
