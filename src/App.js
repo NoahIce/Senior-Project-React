@@ -6,72 +6,49 @@ import SignIn from './SignIn/SignIn'
 import ListBoards from './ListBoards/ListBoards';
 import axios from 'axios';
 import { CLIENT_ID, API_KEY, DISCOVERY_DOC, SCOPES } from './config';
+import { useState, setState } from 'react';
 
-class App extends Component {
+function App (props) {
 
     //State
-    state = {
-        loggedIn: false,
-        //user: null,
-        tokenClient: null,
-        access_token: null
-    }
-
-    //Method for refeshing when state changes
-     refresh = async () => {
-      console.log(this.state.user.user_id)
-                console.log("submit")
-                    try{
-                    await axios.get("http://localhost:3000/users/readUserById/?user_id=" + this.state.user.user_id).then(result => {
-                        console.log(result.status < 400);
-                        console.log(result.data)
-                        this.setState({ user: result.data[0]});
-                    })
-                }
-                catch (error)
-                {
-                    console.log(error)
-                }    
-    }
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [tokenClient, setTokenClient] = useState({});
+    const [user, setUser] = useState(null);
+    const [access_token, setAccess_token] = useState({});
 
     //Method to sign in user
-    signIn = (user) => {
-        console.log(user)
-        this.setState({ user: user });
-        console.log(this.state.user)
+    async function signIn (email) {
+        await axios.get("http://localhost:3000/users/readUserByEmail/?email=" + email).then((user) => {
+            setUser(user.data[0])
+            setLoggedIn(true) 
+        })
     }
+    async function refresh () {
+        await axios.get("http://localhost:3000/users/readUserByEmail/?email=" + user.email).then((user) => {
+            setUser(user.data[0]) 
+            console.log(user.data[0])
+        })
+    } 
 
     //Method to sign out user
-    signOut = () => {
+    function signOut ()  {
         console.log("Signing out")
-        this.setState({ loggedIn: false });
+        //this.setState({ loggedIn: false });
     }
 
-    listBoards = (this.state.loggedIn === false ? "" : <ListBoards user={this.state.user} refresh={this.refresh}></ListBoards>)
-    
-
-    componentDidMount() {
-    console.log("App Mounted")
-    console.log(CLIENT_ID)
-    console.log(this.props.tokenClient)
-  }
-
-  googleSignIn = (access_token) => {
-    console.log("Google sign in: " + access_token)
-    this.setState({"access_token": access_token})
-    this.setState({ loggedIn: true }) //uncomment to display <ListBoards></ListBoards>
-  }
+    function googleSignIn (access_token) {
+        console.log("Google sign in: " + access_token)
+        setAccess_token(access_token)
+        setLoggedIn(true) //uncomment to display <ListBoards></ListBoards>
+    }
 
     //Render
-  render() {
-    this.listBoards = (this.state.loggedIn === false ? "" : <ListBoards user={this.state.user} refresh={this.refresh} tokenClient={this.props.tokenClient}></ListBoards>)
-    return (
+  return (
        <div>
-        <Navbar loggedIn={this.state.loggedIn} signIn={this.signIn} signOut={this.signOut} tokenClient={this.props.tokenClient} googleSignIn={this.googleSignIn}></Navbar>
-        {this.listBoards}
+        <Navbar loggedIn={loggedIn} signIn={signIn} signOut={signOut} tokenClient={props.tokenClient} googleSignIn={googleSignIn}></Navbar>
+        {user === null ? "" : <ListBoards key={user} user={user} access_token={access_token} refresh={refresh} ></ListBoards>}
        </div> 
-    );
-  }
+  )
 }
 
 export default App;

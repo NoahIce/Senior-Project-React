@@ -11,7 +11,7 @@ class CreateTask extends Component {
         assignee:  -1,
         reviewer: -1,
         story_points: -1,
-        priority: -1
+        priority: -1,
     }
 
     //Handle title change
@@ -52,14 +52,28 @@ class CreateTask extends Component {
 //Update request
     update = () => {
         console.log(this.state)
-        axios.post("http://localhost:3000/tasks/createTask", this.state).then((result) =>{
-            console.log("Wrote task" + this.state)
+
+        axios.post("https://tasks.googleapis.com/tasks/v1/lists/" + this.props.board.tasklist_id +  "/tasks/?access_token=" + this.props.access_token, 
+        {"title": this.state.title, "notes": this.state.description, "due": new Date().toISOString()}).then((response) => {
+            console.log(response)
+            let task = {
+                board_id: this.state.board_id,
+                title: this.state.title,
+                board_column_id: this.state.board_column_id,
+                description: this.state.description,
+                assignee:  this.state.assignee,
+                reviewer: this.state.reviewer,
+                story_points: this.state.story_points,
+                priority: this.state.priority,
+                google_id: response.data.id
+            }
+            axios.post("http://localhost:3000/tasks/createTask", task).then((result) =>{
+            console.log("Wrote task")
             console.log(result)
-            console.log("here")
-            this.props.refresh(async () => {
-                  
-            });
+            //this.props.refresh()
+            })
         })
+       
     }
 
     

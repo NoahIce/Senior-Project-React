@@ -66,10 +66,8 @@ function SignIn (props) {
     }
 
     async function fetchUser(email) {
-      await axios.get("http://localhost:3000/users/readUserByEmail/?email=" + email).then((user) => {
-        console.log(user.data[0])
-        props.onSubmit(user.data[0])
-      })
+      
+        props.onSubmit(email)
     }
 
     async function fetchGoogleTasks(user_id) {

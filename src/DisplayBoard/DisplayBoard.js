@@ -4,6 +4,7 @@ import CreateTask from "../CreateTask/CreateTask";
 import './DisplayBoard.css'
 import DisplayTask from "../DisplayTask/DisplayTask";
 import BoardColumnModal from "../BoardColumnModal/BoardColumnModal";
+import axios from "axios";
 
 class DisplayBoard extends Component {
 
@@ -45,7 +46,7 @@ class DisplayBoard extends Component {
                                     </div>
                                 </div>
                                 </button>
-                                <DisplayTask task={task} board={this.props.board}></DisplayTask>
+                                <DisplayTask task={task} board={this.props.board} access_token={this.props.access_token}></DisplayTask>
                                 </div>
                                 )
                             })}
@@ -58,7 +59,7 @@ class DisplayBoard extends Component {
                                 <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target={'#newTask'+column.column_id}>New Task</button>
                         </div>
                         </div>
-                        <CreateTask board={this.props.board} column={column} refresh={this.props.refresh}></CreateTask>
+                        <CreateTask board={this.props.board} column={column} access_token={this.props.access_token} refresh={this.props.refresh}></CreateTask>
                     </div>
                 </div>
             </div>
@@ -66,6 +67,14 @@ class DisplayBoard extends Component {
         </div>) })}
         </div>
     )
+    
+
+    test = () => {
+       axios.get("https://tasks.googleapis.com/tasks/v1/users/@me/lists?access_token=" + this.props.access_token)
+      .then((result) => {
+        console.log(result)
+      })
+    }
 
     //Render
     render() {
@@ -76,9 +85,10 @@ class DisplayBoard extends Component {
                 <div className="invite">
                 <button className="btn btn-primary" data-toggle="modal" data-target="#invite">Invite a user</button>
                 {this.boardJSX}
-            </div>
+                </div>
                 <button className="btn btn-light new-column" data-bs-toggle="modal" data-bs-target="#newColumn">New Column</button>
                 <CreateBoardColumn board={this.props.board}></CreateBoardColumn>
+                <button onClick={this.test}>Test</button>
             </div>
             
 

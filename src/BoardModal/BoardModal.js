@@ -19,22 +19,28 @@ class BoardModal extends Component {
     //Update request
     update = () => {
         console.log(this.state)
-        axios.put("http://localhost:3000/boards/updateBoard", this.state).then((result) =>{
-    console.log("Wrote board" + this.state)
-    console.log(result)
-    console.log("here")
-        }
-            
-        )
+        axios.put("https://tasks.googleapis.com/tasks/v1/users/@me/lists/" + this.props.board.tasklist_id + "?access_token=" + this.props.access_token, 
+        {"id": this.props.board.tasklist_id, "title": this.state.title}).then((response) =>{
+            console.log(response)
+            axios.put("http://localhost:3000/boards/updateBoard", this.state).then((result) =>{
+            console.log("Wrote board" + this.state)
+            console.log(result)
+            console.log("here")
+            })
+        })
     }
 
     //Delete request
     delete = () => {
-        axios.delete("http://localhost:3000/boards/deleteBoard/" + this.state.board_id).then((result) =>{
-    console.log("Delete board" + this.state)
-    console.log(result)
-    console.log("here")
+        axios.delete("https://tasks.googleapis.com/tasks/v1/users/@me/lists/" + this.props.board.tasklist_id + "?access_token=" + this.props.access_token).then((response) =>{
+            console.log(response);
+            axios.delete("http://localhost:3000/boards/deleteBoard/" + this.state.board_id).then((result) =>{
+                console.log("Delete board" + this.state)
+                console.log(result)
+                console.log("here")
+            })
         })
+        
     }
 
     //Render

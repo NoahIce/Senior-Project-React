@@ -13,7 +13,8 @@ class DisplayTask extends Component {
         assignee:  this.props.task.assignee,
         reviewer: this.props.task.reviewer,
         story_points: this.props.task.story_points,
-        priority: this.props.task.priority
+        priority: this.props.task.priority,
+        google_id: this.props.task.google_id
     }
 
     //Handle title change
@@ -62,21 +63,24 @@ class DisplayTask extends Component {
     //update request
     update = () => {
         console.log(this.state)
-        axios.put("http://localhost:3000/tasks/updateTask", this.state).then((result) =>{
-    console.log("Wrote task" + this.state)
-    console.log(result)
-    console.log("here")
-        }
-            
-        )
+        axios.put("https://tasks.googleapis.com/tasks/v1/lists/"+ this.props.board.tasklist_id +"/tasks/" + this.props.task.google_id + "?access_token=" + this.props.access_token, 
+        {"id": this.props.task.google_id, "title": this.state.title, "notes": this.state.description}).then((result) =>{
+            axios.put("http://localhost:3000/tasks/updateTask", this.state).then((result) =>{
+            console.log("Updated task" + this.state)
+            console.log(result)
+            console.log("here")
+            })
+        })
     }
 
     //delete request
     delete = () => {
-        axios.delete("http://localhost:3000/tasks/deleteTask/" + this.state.task_id).then((result) =>{
-    console.log("Delete task" + this.state)
-    console.log(result)
-    console.log("here")
+        axios.delete("https://tasks.googleapis.com/tasks/v1/lists/"+ this.props.board.tasklist_id +"/tasks/" + this.props.task.google_id + "?access_token=" + this.props.access_token).then((response) =>{
+            axios.delete("http://localhost:3000/tasks/deleteTask/" + this.state.task_id).then((result) =>{
+                console.log("Delete task" + this.state)
+                console.log(result)
+                console.log("here")
+            })
         })
     }
 

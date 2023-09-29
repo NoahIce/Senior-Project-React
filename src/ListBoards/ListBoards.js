@@ -44,7 +44,7 @@ class ListBoards extends Component {
                         </button>
                     </div>
                     <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target={'#board'+permission.boards[0].board_id}>Edit</button>
-                    <BoardModal board={permission.boards[0]}></BoardModal>
+                    <BoardModal board={permission.boards[0]} access_token={this.props.access_token}></BoardModal>
                 </div>
                 </div>
                 
@@ -63,9 +63,11 @@ class ListBoards extends Component {
 
     //render
     render() {
-        console.log(this.state.selectedBoard)
+
+            
+        console.log(this.props.user)
         this.updateBoardsList();
-        this.displayBoard = (this.state.selectedBoard === -1 ? "" : <DisplayBoard user={this.props.user} board={this.state.selectedBoard} refresh = {this.props.refresh}></DisplayBoard>)
+        this.displayBoard = (this.state.selectedBoard === -1 ? "" : <DisplayBoard key={this.state.selectedBoard} user={this.props.user} board={this.state.selectedBoard} access_token={this.props.access_token} refresh={this.props.refresh}></DisplayBoard>)
         console.log(this.props.refresh)
             return (
                 <div>
@@ -75,7 +77,7 @@ class ListBoards extends Component {
                     
                     {this.displayBoard}
                     {this.state.selectedBoard === -1 ? <button  className="btn btn-light new-column" data-bs-toggle="modal" data-bs-target="#newBoard">New Board</button> : ""}
-                    <CreateBoard user={this.state.user}></CreateBoard>
+                    <CreateBoard user={this.state.user} access_token={this.props.access_token}></CreateBoard>
                 </div>
             )
         }
