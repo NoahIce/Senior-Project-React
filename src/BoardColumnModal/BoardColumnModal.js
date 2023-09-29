@@ -22,21 +22,21 @@ class BoardColumnModal extends Component {
     update = () => {
         console.log(this.state)
         axios.put("http://localhost:3000/boardColumns/updateBoardColumn", this.state).then((result) =>{
-        console.log("Wrote task" + this.state)
-        console.log(result)
-        console.log("here")
-        }
-            
-        )
+            console.log("Wrote column" + this.state)
+            console.log(result)
+            console.log("here")
+        })
     }
 
     //Delete request
     delete = () => {
-        axios.delete("http://localhost:3000/boardColumns /deleteBoardColumn/" + this.state.column_id).then((result) =>{
-    console.log("Delete task" + this.state)
-    console.log(result)
-    console.log("here")
-        })
+    /*
+    axios.delete("http://localhost:3000/boardColumns /deleteBoardColumn/" + this.state.column_id).then((result) =>{
+        console.log("Delete task" + this.state)
+        console.log(result)
+        console.log("here")
+    })
+    */
     }
 
     //Render

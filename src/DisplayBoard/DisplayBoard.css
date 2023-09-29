@@ -18,6 +18,9 @@ input {
   max-width: fit-content;
 }
 
+ul.sample {
+  list-style-image: url('');
+  }
 
 .task {
   background-color: white;
