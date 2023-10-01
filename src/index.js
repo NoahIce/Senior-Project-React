@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App';
 import { CLIENT_ID, API_KEY, DISCOVERY_DOC, SCOPES } from './config';
 
-let tokenClient;
+let tokenClient; //Defined later
 let gapiInited = false;
 let gisInited = false;
 

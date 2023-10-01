@@ -26,6 +26,7 @@ class BoardModal extends Component {
             console.log("Wrote board" + this.state)
             console.log(result)
             console.log("here")
+            this.props.refresh();
             })
         })
     }
@@ -38,6 +39,7 @@ class BoardModal extends Component {
                 console.log("Delete board" + this.state)
                 console.log(result)
                 console.log("here")
+                this.props.refresh();
             })
         })
         

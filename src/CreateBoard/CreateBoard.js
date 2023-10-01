@@ -27,6 +27,7 @@ class CreateBoard extends Component {
             {title: this.state.title, user_id:this.state.user.user_id, email: this.props.user.email, tasklist_id: response.data.id}).then((result) =>{
                 console.log("Wrote board")
                 console.log(result)
+                this.props.refresh();
             })
         })
     }

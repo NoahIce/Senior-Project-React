@@ -17,7 +17,12 @@ function DisplayBoard(props) {
     async function update() {
         await axios.get("http://localhost:3000/users/readUserByEmail/?email=" + props.user.email).then((user) => {
             //console.log(user.data[0].permissions[0].boards[0].boardColumns)
-            setItems(user.data[0].permissions[0].boards[0].boardColumns)
+            console.log(props.board)
+            var index = user.data[0].permissions.findIndex(function(item, i){
+                return item.boards[0].board_id === props.board.board_id
+            });
+            console.log(index)
+            setItems(user.data[0].permissions[index].boards[0].boardColumns)
         })
     }
 
@@ -60,15 +65,39 @@ function DisplayBoard(props) {
 
                 reorderedItems.board_column_id = destinationColumn[0].board_column_id
 
-                await axios.put("http://localhost:3000/tasks/updateTask", reorderedItems).then((result) =>{
-                    console.log("Updated task")
-                    console.log(result)
-                })
+                var positions = []
+                items.forEach((column) => {positions.push(column.position)})
+                var lastPosition = -1;
+                positions.forEach((position) => {if (position > lastPosition) lastPosition = position})
+
+                
+
+                console.log(items.slice(-1)[0].board_column_id)
+                if (destination.droppableId.toString() == items[items.findIndex(function(column){return column.position === lastPosition})].board_column_id ) {
+                    console.log("Last col")
+                    await axios.put("http://localhost:3000/tasks/updateTask", reorderedItems).then((result) =>{
+                        console.log("Updated task")
+                        console.log(result)
+                        axios.put("https://tasks.googleapis.com/tasks/v1/lists/"+ props.board.tasklist_id +"/tasks/" + reorderedItems.google_id + "?access_token=" + props.access_token, 
+                        {"id": reorderedItems.google_id, "title": reorderedItems.title, "notes": reorderedItems.description, "due": new Date(reorderedItems.due).toISOString(), "status": "completed"})
+                    })
+                }
+                else {
+                    await axios.put("http://localhost:3000/tasks/updateTask", reorderedItems).then((result) =>{
+                        console.log("Updated task")
+                        console.log(result)
+                        axios.put("https://tasks.googleapis.com/tasks/v1/lists/"+ props.board.tasklist_id +"/tasks/" + reorderedItems.google_id + "?access_token=" + props.access_token, 
+                        {"id": reorderedItems.google_id, "title": reorderedItems.title, "notes": reorderedItems.description, "due": new Date(reorderedItems.due).toISOString(), "status": "needsAction"})
+                    })
+                }
 
                 oldItems[sourceIndex] = sourceColumn[0];
                 oldItems[destinationIndex] = destinationColumn[0]
 
+                
+
                 setItems(oldItems)
+                
             }
             catch(error) {
                 console.log(error)

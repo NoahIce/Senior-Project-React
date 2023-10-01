@@ -15,6 +15,7 @@ function App (props) {
     const [tokenClient, setTokenClient] = useState({});
     const [user, setUser] = useState(null);
     const [access_token, setAccess_token] = useState({});
+    const [selectedBoard, setSelectedBoard] = useState(-1)
 
     //Method to sign in user
     async function signIn (email) {
@@ -45,8 +46,10 @@ function App (props) {
     //Render
   return (
        <div>
-        <Navbar loggedIn={loggedIn} signIn={signIn} signOut={signOut} tokenClient={props.tokenClient} googleSignIn={googleSignIn}></Navbar>
-        {user === null ? "" : <ListBoards key={user} user={user} access_token={access_token} refresh={refresh} ></ListBoards>}
+        <Navbar loggedIn={loggedIn} signIn={signIn} signOut={signOut} tokenClient={props.tokenClient} googleSignIn={googleSignIn} setSelectedBoard={setSelectedBoard}></Navbar>
+        <Router>
+            {user === null ? "" : <ListBoards key={user} user={user} access_token={access_token} refresh={refresh} selectedBoard={selectedBoard} setSelectedBoard={setSelectedBoard}></ListBoards>}
+        </Router>
        </div> 
   )
 }
