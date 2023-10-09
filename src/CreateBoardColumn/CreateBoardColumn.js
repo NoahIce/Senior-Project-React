@@ -6,7 +6,8 @@ class CreateBoardColumn extends Component {
     //State
     state = {
         board_id: this.props.board.board_id,
-        position: 0,
+        position: this.props.boardColumns[this.props.board.boardColumns.length-1].position + 1,
+        tasklist_id: this.props.board.tasklist_id,
         title: '',
     }
 
@@ -21,9 +22,8 @@ class CreateBoardColumn extends Component {
     update = () => {
         console.log(this.state)
         axios.post("http://localhost:3000/boardColumns/createBoardColumn", this.state).then((result) =>{
-        console.log("Wrote task" + this.state)
-        console.log(result)
-        console.log("here")
+            console.log("Wrote column" + this.state)
+            this.props.refresh();
         }
             
         )

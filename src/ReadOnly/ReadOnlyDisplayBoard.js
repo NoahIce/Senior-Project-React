@@ -1,7 +1,7 @@
 import { Component } from "react";
 import CreateBoardColumn from "../CreateBoardColumn/CreateBoardColumn";
 import CreateTask from "../CreateTask/CreateTask";
-import "./DisplayBoard.css";
+import "../DisplayBoard/DisplayBoard.css";
 import DisplayTask from "../DisplayTask/DisplayTask";
 import BoardColumnModal from "../BoardColumnModal/BoardColumnModal";
 import axios from "axios";
@@ -9,17 +9,18 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useState } from "react";
 import { useEffect } from "react";
 import InviteUser from "../InviteUser/InviteUser";
+import ReadOnlyDisplayTask from "./ReadOnlyDisplayTask";
 
 
 
-function DisplayBoard(props) {
+function ReadOnlyDisplayBoard(props) {
 
     
 
     const [items, setItems] = useState(props.board.boardColumns)
 
     useEffect(() => {
-        console.log("items update")
+        console.log("read")
         update()
     }, []);
 
@@ -266,35 +267,19 @@ function DisplayBoard(props) {
                                                                         </Draggable>
                                                                         
                                                                         </button>
-                                                                        <DisplayTask
+                                                                        <ReadOnlyDisplayTask
                                                                             task={task}
                                                                             board={props.board}
                                                                             access_token={props.access_token}
                                                                             refresh={update}
-                                                                        ></DisplayTask>
+                                                                        ></ReadOnlyDisplayTask>
                                                                         </div>
                                                                     );
                                                                 })}
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="new-task">
-                                                    {column.position !== 1 ? "" :<button
-                                                            type="button"
-                                                            className="btn btn-primary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target={"#newTask" + column.column_id}
-                                                        >
-                                                            New Task
-                                                        </button>}
-                                                    </div>
                                                 </div>
-                                                {column.position !== 1 ? "" : <CreateTask
-                                                    board={props.board}
-                                                    column={column}
-                                                    access_token={props.access_token}
-                                                    refresh={update}
-                                                ></CreateTask>}
                                             </div>
                                         </div>
                                     </div>
@@ -306,15 +291,6 @@ function DisplayBoard(props) {
                         );
                     })}
             </DragDropContext>
-            <div className="newColumn">
-                <button
-                        className="new-column"
-                        data-bs-toggle="modal"
-                        data-bs-target="#newColumn"
-                    >
-                    New Column
-                </button>
-            </div>
             
         </div>
     );
@@ -339,21 +315,9 @@ function DisplayBoard(props) {
                 </div>
                 
                 {boardJSX}
-                <div className="invite">
-                    <button 
-                        type="button" 
-                        className="btn btn-light" 
-                        data-bs-toggle="modal"
-                        data-bs-target="#invite">
-                        Invite a user
-                    </button>
-                </div>
-                
-                <CreateBoardColumn board={props.board} boardColumns={items} refresh={update}></CreateBoardColumn>
-                <InviteUser user={props.user} board={props.board}></InviteUser>
                 
             </div>
         );
 }
 
-export default DisplayBoard;
+export default ReadOnlyDisplayBoard;

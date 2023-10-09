@@ -2,9 +2,13 @@ import axios from "axios";
 import { Component } from "react";
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import './DisplayTask.css'
+import '../DisplayTask/DisplayTask.css'
 
-class DisplayTask extends Component {
+class ReadOnlyDisplayTask extends Component {
+
+    componentDidMount() {
+    }
+    
 
     //State
     state = {
@@ -107,70 +111,18 @@ class DisplayTask extends Component {
     )
 
     //Modal to render
-    taskJSX = (
-        <div className="modal fade" name={"task" + this.props.task.task_id} id={"task" + this.props.task.task_id} tabindex="-1" role="dialog" aria-labelledby="task" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-            <form>
-            <div className="modal-content">
-                <div className="modal-header">
-                <input className="modal-title task-title" id="exampleModalLabel" placeholder="Title" required name="title" defaultValue={this.state.title} onChange={this.titleChange} />
-                <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div className="modal-body">
-                <div className="form-group">
-                    <label>Column: </label>
-                    <select className="selectpicker" onChange={this.columnChange} name="board_column_id">
-                    {this.columnOptions}
-                    </select>
-                </div>
-                <div className="form-group">
-                    <label>Description: </label>
-                    <textarea rows={4}
-            cols={40} className="task-description" onChange={this.descriptionChange} placeholder="Description" id="exampleModalLabel" required name="description" defaultValue={this.props.task.description} />
-                </div>
-                <div className="form-group">
-                    <label>Assignee: </label>
-                    <textarea cols="40" rows={"5"} className="task-assignee" onChange={this.assigneeChange} placeholder="Assignee" id="exampleModalLabel" required name="assignee" defaultValue={this.props.task.assignee} />
-                </div>
-                <div className="form-group">
-                    <label>Reviewer: </label>
-                    <input className="task-reviewer" onChange={this.reviewerChange} id="exampleModalLabel" required  name="reviewer" defaultValue={this.props.task.reviewer} />
-                </div>
-                <div className="form-group">
-                    <label>Story Points: </label>
-                    <input className="task-story-points" onChange={this.storyPointsChange} id="exampleModalLabel" required  name="story_points" defaultValue={this.props.task.story_points} />
-                </div>
-                <div className="form-group">
-                    <label>Priority: </label>
-                    <input className="task-priority" onChange={this.priorityChange} id="exampleModalLabel" required name="priority" defaultValue={this.props.task.priority} />
-                </div>
-                <div className="form-group">
-                <DatePicker
-                    selected={this.state.due}
-                    onChange={this.dateChange}
-                />
-                </div>
-                </div>
-                <div className="modal-footer">
-                <button data-bs-dismiss="modal" type="button" className="btn btn-danger" onClick={this.delete}>Delete</button>
-                <button data-bs-dismiss="modal" type="button" className="btn btn-primary" onClick={this.update}>Save changes</button>
-                </div>
-            </div>
-            </form>
-            </div>
-        </div>
+    taskJSX = (<div></div>
         )
 
     render() {
+        console.log("readlonly")
         this.taskJSX = (
             <div className="modal fade" name={"task" + this.props.task.task_id} id={"task" + this.props.task.task_id} tabindex="-1" role="dialog" aria-labelledby="task" aria-hidden="true">
             <div className="modal-dialog" role="document">
                 <form>
                 <div className="modal-content">
                     <div className="modal-header">
-                    <input className="modal-title task-title" id="exampleModalLabel" placeholder="Title" required name="title" defaultValue={this.state.title} onChange={this.titleChange} />
+                    <input readOnly={true} className="modal-title task-title" id={"title" + this.props.task.task_id} placeholder="Title" name="title" defaultValue={this.state.title} />
                     <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -178,32 +130,31 @@ class DisplayTask extends Component {
                     <div className="modal-body">
                     <div className="form-group">
                         <label>Column: </label>
-                        <select className="selectpicker" onChange={this.columnChange} name="board_column_id">
+                        <select disabled={true} id={"column" + this.props.task.task_id} readOnly={true} className="selectpicker" onChange={this.columnChange} name="board_column_id">
                         {this.columnOptions}
                         </select>
                     </div>
                     <div className="form-group task-description">
                         <label>Description: </label>
-                        <textarea rows={5} cols={30} className="task-description" onChange={this.descriptionChange} placeholder="Description" id="exampleModalLabel" required name="description" defaultValue={this.props.task.description} />
+                        <textarea readOnly={true} rows={5} cols={30} className="task-description" onChange={this.descriptionChange} placeholder="Description" id={"description" + this.props.task.task_id} required name="description" defaultValue={this.props.task.description} />
                     </div>
                     <div className="form-group">
                         <label>Story Points: </label>
-                        <input className="task-story-points" onChange={this.storyPointsChange} id="exampleModalLabel" required  name="story_points" defaultValue={this.props.task.story_points} />
+                        <input readOnly={true} className="task-story-points" onChange={this.storyPointsChange} id={"story_points" + this.props.task.task_id} required  name="story_points" defaultValue={this.props.task.story_points} />
                     </div>
                     <div className="form-group">
                         <label>Priority: </label>
-                        <input className="task-priority" onChange={this.priorityChange} id="exampleModalLabel" required name="priority" defaultValue={this.props.task.priority} />
+                        <input readOnly={true} className="task-priority" onChange={this.priorityChange} id={"priority" + this.props.task.task_id} required name="priority" defaultValue={this.props.task.priority} />
                     </div>
                     <div className="form-group">
                     <DatePicker
+                    disabled={true}
                         selected={this.state.due}
                         onChange={this.dateChange}
                     />
                     </div>
                     </div>
                     <div className="modal-footer">
-                    <button data-bs-dismiss="modal" type="button" className="btn btn-danger" onClick={this.delete}>Delete</button>
-                    <button data-bs-dismiss="modal" type="button" className="btn btn-primary" onClick={this.update}>Save changes</button>
                     </div>
                 </div>
                 </form>
@@ -212,10 +163,11 @@ class DisplayTask extends Component {
             )
         return (
             <div>
+            <input readOnly={true} />
             {this.taskJSX}
             </div>
         )
     }
 }
 
-export default DisplayTask
+export default ReadOnlyDisplayTask

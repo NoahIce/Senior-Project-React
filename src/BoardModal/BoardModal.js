@@ -9,6 +9,11 @@ class BoardModal extends Component {
         title: this.props.board.title,
     }
 
+    defaultState = {
+        board_id: this.props.board.board_id,
+        title: this.props.board.title,
+    }
+
     //Handle title change
     titleChange = (event) => {
         console.log(event.target.value)
@@ -27,6 +32,7 @@ class BoardModal extends Component {
             console.log(result)
             console.log("here")
             this.props.refresh();
+            this.setState(this.defaultState)
             })
         })
     }
@@ -40,6 +46,7 @@ class BoardModal extends Component {
                 console.log(result)
                 console.log("here")
                 this.props.refresh();
+                this.setState(this.defaultState)
             })
         })
         

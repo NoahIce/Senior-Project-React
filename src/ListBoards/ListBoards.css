@@ -1,4 +1,21 @@
 .boards {
   display: flex;
   flex-wrap:wrap;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.newBoard {
+  padding-top: 3rem;
+  text-align: center;
+}
+
+.tabs {
+  width:100%;
+  justify-content: center;
+}
+
+.navItem {
+  width: 6rem;
 }

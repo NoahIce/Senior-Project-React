@@ -1,4 +1,21 @@
 
-.modal-body {
-    flex-wrap: nowrap;
+
+.task-title {
+    width: 100%;
+}
+
+.task-description {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.task-story-points {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    max-height: .5rem;
+}
+
+.task-priority{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }

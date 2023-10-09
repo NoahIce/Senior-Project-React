@@ -1,0 +1,42 @@
+.bigLogo {
+    text-align: center;
+    padding-top: 8rem;
+}
+
+.logo {
+    width: 100%;
+    text-align: left;
+    padding-top: 1rem;
+    padding-left: 2rem;
+}
+
+.log {
+    padding-right: 5rem;
+}
+
+.logoImg {
+    text-align: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    
+}
+
+.logoImg {
+    height: 20%;
+    width: 20%;
+    text-align: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    
+}
+
+.getBoards {
+    text-align: center;
+}
+
+.welcome {
+    width: 100%;
+    text-align: center;
+    padding-top: 8rem;
+    padding-bottom: 3rem;
+}
