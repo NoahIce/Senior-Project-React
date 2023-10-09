@@ -11,6 +11,13 @@ class BoardColumnModal extends Component {
         title: this.props.column.title,
     }
 
+    defaultState = {
+        board_column_id: this.props.column.board_column_id,
+        board_id: this.props.board.board_id,
+        position: this.props.column.position,
+        title: this.props.column.title,
+    }
+
     //Handle title change
     titleChange = (event) => {
         console.log(event.target.value)
@@ -22,20 +29,20 @@ class BoardColumnModal extends Component {
     update = () => {
         console.log(this.state)
         axios.put("http://localhost:3000/boardColumns/updateBoardColumn", this.state).then((result) =>{
-        console.log("Wrote task" + this.state)
-        console.log(result)
-        console.log("here")
-        }
-            
-        )
+            console.log("Wrote column" + this.state)
+            console.log(result)
+            this.props.refresh();
+        })
     }
 
     //Delete request
     delete = () => {
-        axios.delete("http://localhost:3000/boardColumns /deleteBoardColumn/" + this.state.column_id).then((result) =>{
-    console.log("Delete task" + this.state)
-    console.log(result)
-    console.log("here")
+        axios.delete("http://localhost:3000/boardColumns/deleteBoardColumn/" + this.state.board_column_id).then((result) =>{
+            console.log("Delete task" + this.state)
+            console.log(result)
+            console.log("here")
+            this.props.refresh();
+            this.setState(this.defaultState)
         })
     }
 

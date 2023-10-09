@@ -19,12 +19,17 @@ class CreateBoard extends Component {
     //Update request
     update = () => {
         console.log(this.state)
-        axios.post("http://localhost:3000/boards/createBoard", this.state).then((result) =>{
-    console.log("Wrote board" + this.state)
-    console.log(result)
-    console.log("here")
-        }
-        )
+        axios.post("https://tasks.googleapis.com/tasks/v1/users/@me/lists?access_token=" + this.props.access_token, 
+        {"title": this.state.title})
+        .then((response) => {
+            console.log(response)
+            axios.post("http://localhost:3000/boards/createBoard", 
+            {title: this.state.title, user_id:this.state.user.user_id, email: this.props.user.email, tasklist_id: response.data.id}).then((result) =>{
+                console.log("Wrote board")
+                console.log(result)
+                this.props.refresh();
+            })
+        })
     }
 
     //Render
