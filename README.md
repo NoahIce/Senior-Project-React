@@ -14,9 +14,11 @@ This project will solve the problem of integration between an agile methodology 
 ### - https://tasks.googleapis.com/tasks/v1/lists/
 
 ProgLog creates the ability for users to manage tasks using Scrum methodologies as seen below
+
 ![image](https://github.com/NoahIce/Senior-Project-React/assets/54463292/de8fb132-bffe-457c-b47b-cd232655c59c)
 
 Users have the ability to create update and delete tasks, columns and boards that will be mirrored withing Google Calendar.
+
 ![image](https://github.com/NoahIce/Senior-Project-React/assets/54463292/de9f5c66-b868-4a4c-acc9-e28b9625a5c5)
 
 ## Planning
