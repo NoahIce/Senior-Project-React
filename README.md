@@ -12,3 +12,6 @@ This project will solve the problem of integration between an agile methodology 
 ### - https://www.googleapis.com/oauth2/v1/userinfo
 ### - https://tasks.googleapis.com/tasks/v1/users/@me/lists
 ### - https://tasks.googleapis.com/tasks/v1/lists/
+
+ProgLog creates the ability for users to manage tasks using Scrum methodologies as seen below
+![image](https://github.com/NoahIce/Senior-Project-React/assets/54463292/de8fb132-bffe-457c-b47b-cd232655c59c)
